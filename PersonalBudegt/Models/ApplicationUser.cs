@@ -4,7 +4,7 @@ namespace PersonalBudget.Models
 {
     public class ApplicationUser : IdentityUser<int>
     {
-        public List<Plan> Plans { get; set; }
-        public List<Transaction> Transactions { get; set; }
+        public ICollection<Plan> Plans { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
     }
 }

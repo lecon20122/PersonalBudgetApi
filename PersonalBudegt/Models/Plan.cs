@@ -9,7 +9,7 @@
         public decimal TotalActual { get; set; }
         public int UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public List<BudgetGroup> BudgetGroups { get; set; }
+        public ICollection<BudgetGroup> BudgetGroups { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime EndedAt { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
