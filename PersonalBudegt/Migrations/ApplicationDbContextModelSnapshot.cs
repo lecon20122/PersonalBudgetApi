@@ -258,7 +258,7 @@ namespace PersonalBudget.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("BudgetGroups");
+                    b.ToTable("BudgetGroups", (string)null);
                 });
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetItem", b =>
@@ -295,7 +295,7 @@ namespace PersonalBudget.Migrations
 
                     b.HasIndex("BudgetGroupId");
 
-                    b.ToTable("BudgetItems");
+                    b.ToTable("BudgetItems", (string)null);
                 });
 
             modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
@@ -336,7 +336,7 @@ namespace PersonalBudget.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Plans");
+                    b.ToTable("Plans", (string)null);
                 });
 
             modelBuilder.Entity("PersonalBudget.Models.Transaction", b =>
@@ -375,7 +375,7 @@ namespace PersonalBudget.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

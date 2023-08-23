@@ -6,6 +6,8 @@ using Microsoft.OpenApi.Models;
 using PersonalBudget.Authentication;
 using PersonalBudget.DataAccess;
 using PersonalBudget.Models;
+using PersonalBudget.Services;
+using PersonalBudget.Services.Contracts;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +54,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication
+    (
+        options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }
+    )
     .AddJwtBearer(
         options => options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -63,12 +73,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
         }
     );
 
 
-    builder.Services.AddScoped<IAccount, AccountService>();
+builder.Services.AddScoped<IAccount, AccountService>();
+builder.Services.AddScoped<IPlanService, PlanService>();
 
 var app = builder.Build();
 
@@ -81,6 +92,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
