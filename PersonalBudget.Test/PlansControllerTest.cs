@@ -21,7 +21,6 @@ namespace PersonalBudget.Test
                 Description = "Test Description",
                 TotalPlanned = 1000,
                 CreatedAt = DateTime.Now,
-                EndedAt = DateTime.Now.AddDays(30)
             };
 
             mockPlanService
@@ -33,7 +32,6 @@ namespace PersonalBudget.Test
                     Description = "Test Description",
                     TotalPlanned = 1000,
                     CreatedAt = DateTime.Now,
-                    EndedAt = DateTime.Now.AddDays(30),
                     UserId = 1
                 });
 
