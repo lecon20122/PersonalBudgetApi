@@ -22,20 +22,14 @@ namespace PersonalBudget.Services
         }
         public async Task<Plan> CreatePlan(PlanDTO plan)
         {
-
-            var plans = _dbContext.Plans.Where(p =>
-              (p.CreatedAt >= plan.CreatedAt && p.CreatedAt <= plan.EndedAt) ||
-              (p.EndedAt >= plan.CreatedAt && p.EndedAt <= plan.EndedAt) &&
-              p.UserId == _userId);
-
-
-
+            var plans = _dbContext.Plans
+                .Where(p => p.UserId == _userId)
+                .Where(p => p.CreatedAt.Month == plan.CreatedAt.Month);
 
             if (plans.Any())
             {
-                throw new Exception("Plan already exists in the same duration");
+                throw new Exception("You already have a plan for this month");
             }
-
 
             var newPlan = new Plan
             {
@@ -43,7 +37,6 @@ namespace PersonalBudget.Services
                 Description = plan.Description,
                 TotalPlanned = plan.TotalPlanned,
                 CreatedAt = plan.CreatedAt,
-                EndedAt = plan.EndedAt,
                 UserId = _userId
             };
 

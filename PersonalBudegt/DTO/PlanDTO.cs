@@ -7,6 +7,5 @@
         public decimal TotalPlanned { get; set; }
         public decimal TotalActual { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime EndedAt { get; set; }
     }
 }

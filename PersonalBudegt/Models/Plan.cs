@@ -20,8 +20,6 @@ namespace PersonalBudget.Models
         public ICollection<BudgetGroup> BudgetGroups { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime EndedAt { get; set; }
         [AllowNull]
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
     }
