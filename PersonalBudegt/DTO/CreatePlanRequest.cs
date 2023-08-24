@@ -1,6 +1,6 @@
 ﻿namespace PersonalBudget.DTO
 {
-    public class PlanDTO
+    public class CreatePlanRequest
     {
         public string Name { get; set; }
         public string Description { get; set; }
