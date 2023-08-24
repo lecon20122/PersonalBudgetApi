@@ -1,6 +1,6 @@
 # Personal Budget API
 
-This is a personal budget API written in ***ASP.NET Core 7*** and unit tested with tools like ***Moq***. It allows users to track their income and expenses, set budgets, and get insights into their spending habits.
+This is a personal budget API written in ***ASP.NET Core 7*** and unit-tested with tools like ***Moq***. It allows users to track their income and expenses, set budgets, and get insights into their spending habits.
 
 ## Features
 
@@ -12,7 +12,12 @@ This is a personal budget API written in ***ASP.NET Core 7*** and unit tested wi
 
 ## Requirements
 
-- .NET Core 7
+- Microsoft.EntityFrameworkCore.Tools - v7.0.9
+- Microsoft.AspNetCore.Authentication.JwtBearer - v7.0.9
+- Microsoft.AspNetCore.Identity.EntityFrameworkCore - v7.0.9
+- Microsoft.EntityFrameworkCore.SqlServer- v7.0.9
+- Moq - v4.20.69
+- xUnit - v2.4.2
 
 ## Installation
 
