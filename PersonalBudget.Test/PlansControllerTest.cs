@@ -15,7 +15,7 @@ namespace PersonalBudget.Test
             // Arrange
             var mockPlanService = new Mock<IPlanService>();
 
-            var planDTO = new PlanDTO
+            var planDTO = new CreatePlanRequest
             {
                 Name = "Test Plan",
                 Description = "Test Description",
