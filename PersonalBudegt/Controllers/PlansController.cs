@@ -33,7 +33,7 @@ namespace PersonalBudget.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Plan>> CreatePlan([FromBody] PlanDTO plan)
+        public async Task<ActionResult<Plan>> CreatePlan([FromBody] CreatePlanRequest plan)
         {
             try
             {

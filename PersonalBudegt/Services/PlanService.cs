@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PersonalBudget.DataAccess;
 using PersonalBudget.DTO;
 using PersonalBudget.Models;
@@ -20,7 +21,7 @@ namespace PersonalBudget.Services
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<Plan> CreatePlan(PlanDTO plan)
+        public async Task<Plan> CreatePlan(CreatePlanRequest plan)
         {
             var plans = _dbContext.Plans
                 .Where(p => p.UserId == _userId)
@@ -46,9 +47,19 @@ namespace PersonalBudget.Services
             return newPlan;
         }
 
-        public void DeletePlan(int id)
+        public async Task DeletePlan(int id)
         {
-            throw new NotImplementedException();
+            var plan = await _dbContext.Plans
+                .Where(p => p.UserId == _userId)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (plan == null)
+            {
+                throw new Exception("Plan not found");
+            }
+
+            _dbContext.Plans.Remove(plan);
+            await _dbContext.SaveChangesAsync();
         }
 
         public IEnumerable<Plan> GetPlans()
