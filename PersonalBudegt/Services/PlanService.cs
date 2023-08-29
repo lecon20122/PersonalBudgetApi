@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PersonalBudget.DataAccess;
-using PersonalBudget.DTO;
 using PersonalBudget.Models;
+using PersonalBudget.Requests;
 using PersonalBudget.Services.Contracts;
 
 namespace PersonalBudget.Services
@@ -62,9 +62,12 @@ namespace PersonalBudget.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Plan> GetPlans()
+        public async Task<IEnumerable<Plan>> GetPlans()
         {
-            throw new NotImplementedException();
+            return await _dbContext.Plans
+                .Where(p => p.UserId == _userId)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
         }
 
         public Plan Plan(int id)

@@ -1,10 +1,11 @@
-﻿using PersonalBudget.Models;
+﻿using PersonalBudget.DTO;
+using PersonalBudget.Models;
 
 namespace PersonalBudget.Authentication
 {
     public interface IAccount
     {
-        Task<LoginResult> Login(LoginRequest request);
+        Task<UserDTO> Login(LoginRequest request);
         Task<ApplicationUser> Register(NewAccountRequest request);
         void Logout();
     }

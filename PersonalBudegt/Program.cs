@@ -77,6 +77,17 @@ builder.Services.AddAuthentication
         }
     );
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000")
+               .AllowAnyMethod()
+               .AllowCredentials()
+               .AllowAnyHeader();
+    });
+});
+
 
 builder.Services.AddScoped<IAccount, AccountService>();
 builder.Services.AddScoped<IPlanService, PlanService>();
@@ -92,8 +103,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

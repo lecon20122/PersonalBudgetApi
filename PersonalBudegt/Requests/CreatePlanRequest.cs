@@ -1,4 +1,4 @@
-﻿namespace PersonalBudget.DTO
+﻿namespace PersonalBudget.Requests
 {
     public class CreatePlanRequest
     {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using PersonalBudget.DTO;
 using PersonalBudget.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,7 +18,7 @@ namespace PersonalBudget.Authentication
             _userManager = userManager;
             _configuration = configuration;
         }
-        public async Task<LoginResult> Login(LoginRequest request)
+        public async Task<UserDTO> Login(LoginRequest request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -42,9 +43,11 @@ namespace PersonalBudget.Authentication
                            claims: claims,
                            expires: DateTime.Now.AddDays(1),
                            signingCredentials: new SigningCredentials(authSignedKey, SecurityAlgorithms.HmacSha256));
-            return new LoginResult
+            return new UserDTO
             {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Email = user.Email,
+                Name = user.UserName,
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo
             };
         }

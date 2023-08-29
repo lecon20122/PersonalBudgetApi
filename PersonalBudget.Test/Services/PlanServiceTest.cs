@@ -1,5 +1,6 @@
 ﻿using PersonalBudget.DataAccess;
 using PersonalBudget.DTO;
+using PersonalBudget.Requests;
 using PersonalBudget.Services;
 using PersonalBudget.Services.Contracts;
 using PersonalBudget.Test.Fixtures;

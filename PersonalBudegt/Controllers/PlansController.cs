@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PersonalBudget.DTO;
 using PersonalBudget.General;
 using PersonalBudget.Models;
+using PersonalBudget.Requests;
 using PersonalBudget.Services.Contracts;
 
 namespace PersonalBudget.Controllers
@@ -20,15 +20,16 @@ namespace PersonalBudget.Controllers
         }
 
         [HttpGet]
-        public string GetPlans()
+        public async Task<ActionResult<IEnumerable<Plan>>> GetPlans()
         {
             try
             {
-                return "YES";
+                var plans = await _plans.GetPlans();
+                return Ok(plans);
             }
             catch (Exception ex)
             {
-                return "NO";
+                return BadRequest(new Response { IsSuccess = false, Message = ex.Message });
             }
         }
 
