@@ -301,7 +301,7 @@ namespace PersonalBudget.Migrations
                     b.ToTable("BudgetItems");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
+            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -431,7 +431,7 @@ namespace PersonalBudget.Migrations
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetGroup", b =>
                 {
-                    b.HasOne("PersonalBudget.Models.Plan", null)
+                    b.HasOne("PersonalBudget.Models.GetPlanAsync", null)
                         .WithMany("BudgetGroups")
                         .HasForeignKey("PlanId");
                 });
@@ -447,7 +447,7 @@ namespace PersonalBudget.Migrations
                     b.Navigation("BudgetGroup");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
+            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
                 {
                     b.HasOne("PersonalBudget.Models.ApplicationUser", "User")
                         .WithMany("Plans")
@@ -489,7 +489,7 @@ namespace PersonalBudget.Migrations
                     b.Navigation("BudgetItems");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
+            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
                 {
                     b.Navigation("BudgetGroups");
                 });

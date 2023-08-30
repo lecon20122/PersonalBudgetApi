@@ -12,8 +12,8 @@ using PersonalBudget.DataAccess;
 namespace PersonalBudget.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230807172629_CreateInitialSnapshot")]
-    partial class CreateInitialSnapshot
+    [Migration("20230830153054_UpdateBudgetGroupTable")]
+    partial class UpdateBudgetGroupTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -237,22 +237,12 @@ namespace PersonalBudget.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlanId")
+                    b.Property<int>("PlanId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalActual")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalPlanned")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -301,7 +291,7 @@ namespace PersonalBudget.Migrations
                     b.ToTable("BudgetItems");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
+            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -315,9 +305,6 @@ namespace PersonalBudget.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("EndedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -353,7 +340,7 @@ namespace PersonalBudget.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BudgetItemId")
+                    b.Property<int?>("BudgetItemId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -434,9 +421,13 @@ namespace PersonalBudget.Migrations
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetGroup", b =>
                 {
-                    b.HasOne("PersonalBudget.Models.GetPlanAsync", null)
+                    b.HasOne("PersonalBudget.Models.Plan", "Plan")
                         .WithMany("BudgetGroups")
-                        .HasForeignKey("PlanId");
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetItem", b =>
@@ -450,7 +441,7 @@ namespace PersonalBudget.Migrations
                     b.Navigation("BudgetGroup");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
+            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
                 {
                     b.HasOne("PersonalBudget.Models.ApplicationUser", "User")
                         .WithMany("Plans")
@@ -465,9 +456,7 @@ namespace PersonalBudget.Migrations
                 {
                     b.HasOne("PersonalBudget.Models.BudgetItem", "BudgetItem")
                         .WithMany()
-                        .HasForeignKey("BudgetItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BudgetItemId");
 
                     b.HasOne("PersonalBudget.Models.ApplicationUser", "User")
                         .WithMany("Transactions")
@@ -492,7 +481,7 @@ namespace PersonalBudget.Migrations
                     b.Navigation("BudgetItems");
                 });
 
-            modelBuilder.Entity("PersonalBudget.Models.GetPlanAsync", b =>
+            modelBuilder.Entity("PersonalBudget.Models.Plan", b =>
                 {
                     b.Navigation("BudgetGroups");
                 });

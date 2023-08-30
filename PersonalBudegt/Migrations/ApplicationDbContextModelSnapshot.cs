@@ -234,22 +234,12 @@ namespace PersonalBudget.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PlanId")
+                    b.Property<int>("PlanId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("TotalActual")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("TotalPlanned")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -347,7 +337,7 @@ namespace PersonalBudget.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BudgetItemId")
+                    b.Property<int?>("BudgetItemId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -428,9 +418,13 @@ namespace PersonalBudget.Migrations
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetGroup", b =>
                 {
-                    b.HasOne("PersonalBudget.Models.Plan", null)
+                    b.HasOne("PersonalBudget.Models.Plan", "Plan")
                         .WithMany("BudgetGroups")
-                        .HasForeignKey("PlanId");
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("PersonalBudget.Models.BudgetItem", b =>
@@ -459,9 +453,7 @@ namespace PersonalBudget.Migrations
                 {
                     b.HasOne("PersonalBudget.Models.BudgetItem", "BudgetItem")
                         .WithMany()
-                        .HasForeignKey("BudgetItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BudgetItemId");
 
                     b.HasOne("PersonalBudget.Models.ApplicationUser", "User")
                         .WithMany("Transactions")
