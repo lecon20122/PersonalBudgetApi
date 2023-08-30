@@ -1,5 +1,4 @@
 ﻿using PersonalBudget.DataAccess;
-using PersonalBudget.DTO;
 using PersonalBudget.Requests;
 using PersonalBudget.Services;
 using PersonalBudget.Services.Contracts;
@@ -31,14 +30,14 @@ namespace PersonalBudget.Test.Services
 
             var planDTO = new CreatePlanRequest
             {
-                Name = "Test Plan",
+                Name = "Test GetPlanAsync",
                 Description = "Test Description",
                 TotalPlanned = 1000,
                 CreatedAt = DateTime.Now,
             };
 
             // Act
-            var newPaln = await _planService.CreatePlan(planDTO);
+            var newPaln = await _planService.CreatePlanAsync(planDTO);
 
             // Assert
             Assert.Equal(planDTO.Name, newPaln.Name);
@@ -55,7 +54,7 @@ namespace PersonalBudget.Test.Services
 
             var planDTO = new CreatePlanRequest
             {
-                Name = "Test Plan",
+                Name = "Test GetPlanAsync",
                 Description = "Test Description",
                 TotalPlanned = 1000,
                 CreatedAt = DateTime.Now.AddMonths(1),
@@ -63,11 +62,11 @@ namespace PersonalBudget.Test.Services
 
             // Act
 
-            var resultFirstTime = await _planService.CreatePlan(planDTO);
+            var resultFirstTime = await _planService.CreatePlanAsync(planDTO);
 
             // Assert
-            //Expects throw new Exception("Plan already exists in the same duration");
-            await Assert.ThrowsAsync<Exception>(async () => await _planService.CreatePlan(planDTO));
+            //Expects throw new Exception("GetPlanAsync already exists in the same duration");
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.CreatePlanAsync(planDTO));
         }
 
         [Fact]
@@ -76,16 +75,16 @@ namespace PersonalBudget.Test.Services
             // Arrange
             var planDTO = new CreatePlanRequest
             {
-                Name = "Test Plan",
+                Name = "Test GetPlanAsync",
                 Description = "Test Description",
                 TotalPlanned = 1000,
                 CreatedAt = DateTime.Now.AddMonths(2),
             };
 
-            var newPaln = await _planService.CreatePlan(planDTO);
+            var newPaln = await _planService.CreatePlanAsync(planDTO);
 
             // Act
-            await _planService.DeletePlan(newPaln.Id);
+            await _planService.DeletePlanAsync(newPaln.Id);
 
             // Assert
             Assert.Null(_applicationDbContext.Plans.FirstOrDefault(p => p.Id == newPaln.Id));
@@ -97,8 +96,121 @@ namespace PersonalBudget.Test.Services
             // Arrange
             // Act
             // Assert
-            //Expects throw new Exception("Plan not found");
-            await Assert.ThrowsAsync<Exception>(async () => await _planService.DeletePlan(16));
+            //Expects throw new Exception("GetPlanAsync not found");
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.DeletePlanAsync(16));
+        }
+
+        [Fact]
+        public async Task Authenticated_User_Can_Update_Plan()
+        {
+            // Arrange
+            var planRequest = new CreatePlanRequest
+            {
+                Name = "Test GetPlanAsync",
+                Description = "Test Description",
+                TotalPlanned = 1000,
+                CreatedAt = DateTime.Now.AddMonths(3),
+            };
+
+            var newPaln = await _planService.CreatePlanAsync(planRequest);
+
+            var updatePlanRequest = new UpdatePlanRequest
+            {
+                Id = newPaln.Id,
+                Name = "Test GetPlanAsync Updated",
+                Description = "Test Description Updated",
+                TotalPlanned = 2000,
+            };
+
+            // Act
+            var updatedPlan = await _planService.UpdatePlanAsync(updatePlanRequest);
+
+            // Assert
+            Assert.Equal(updatePlanRequest.Name, updatedPlan.Name);
+            Assert.Equal(updatePlanRequest.TotalPlanned, updatedPlan.TotalPlanned);
+            Assert.Equal(updatePlanRequest.Description, updatedPlan.Description);
+        }
+
+        [Fact]
+        public async Task Cannot_Update_Plan_That_Does_Not_Exist()
+        {
+            // Arrange
+            var updatePlanRequest = new UpdatePlanRequest
+            {
+                Id = 16,
+                Name = "Test GetPlanAsync Updated",
+                Description = "Test Description Updated",
+                TotalPlanned = 2000,
+            };
+
+            // Act
+            // Assert
+            //Expects throw new Exception("GetPlanAsync not found");
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.UpdatePlanAsync(updatePlanRequest));
+        }
+
+        [Fact]
+        public async Task GetPlan_Authenticated_User_Can_Get_His_Plan_By_ID()
+        {
+            // Arrange
+            var planRequest = new CreatePlanRequest
+            {
+                Name = "Test GetPlanAsync",
+                Description = "Test Description",
+                TotalPlanned = 1000,
+                CreatedAt = DateTime.Now.AddMonths(3),
+            };
+
+            var newPaln = await _planService.CreatePlanAsync(planRequest);
+
+            // Act
+            var plan = await _planService.GetPlanAsync(newPaln.Id);
+
+            // Assert
+
+            Assert.Equal(planRequest.Name, plan.Name);
+            Assert.Equal(planRequest.TotalPlanned, plan.TotalPlanned);
+            Assert.Equal(planRequest.Description, plan.Description);
+        }
+
+        [Fact]
+        public async Task Cannot_Get_Plan_That_Does_Not_Exist()
+        {
+            // Arrange
+            // Act
+            // Assert
+            //Expects throw new Exception("GetPlanAsync not found");
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.GetPlanAsync(16));
+        }
+
+        [Fact]
+        public async Task GetPlans_Authenticated_User_Can_Get_His_Plans()
+        {
+            // Arrange
+            var planRequest = new CreatePlanRequest
+            {
+                Name = "Test GetPlanAsync",
+                Description = "Test Description",
+                TotalPlanned = 1000,
+                CreatedAt = DateTime.Now.AddMonths(4),
+            };
+
+            var planRequest2 = new CreatePlanRequest
+            {
+                Name = "Test GetPlanAsync",
+                Description = "Test Description",
+                TotalPlanned = 1000,
+                CreatedAt = DateTime.Now.AddMonths(3),
+            };
+
+            var newPaln = await _planService.CreatePlanAsync(planRequest);
+            var newPaln2 = await _planService.CreatePlanAsync(planRequest2);
+
+            // Act
+            var plans = await _planService.GetPlansAsync();
+
+            // Assert
+            Assert.True(plans.Count() == 2);
         }
     }
 }
