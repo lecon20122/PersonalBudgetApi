@@ -19,12 +19,28 @@ namespace PersonalBudget.Controllers
             _plans = plans;
         }
 
+
+        [HttpGet]
+        public async Task<ActionResult<Plan>> Plan(int id)
+        {
+            try
+            {
+                var plan = await _plans.GetPlanAsync(id);
+                return Ok(plan);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response { IsSuccess = false, Message = ex.Message });
+            }
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Plan>>> GetPlans()
         {
             try
             {
-                var plans = await _plans.GetPlans();
+                var plans = await _plans.GetPlansAsync();
                 return Ok(plans);
             }
             catch (Exception ex)
@@ -38,8 +54,22 @@ namespace PersonalBudget.Controllers
         {
             try
             {
-                var newPlan = await _plans.CreatePlan(plan);
+                var newPlan = await _plans.CreatePlanAsync(plan);
                 return Ok(newPlan);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new Response { IsSuccess = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Plan>> UpdatePlan([FromBody] UpdatePlanRequest plan)
+        {
+            try
+            {
+                var updatedPlan = await _plans.UpdatePlanAsync(plan);
+                return Ok(updatedPlan);
             }
             catch (Exception ex)
             {
