@@ -5,10 +5,10 @@ namespace PersonalBudget.Services.Contracts
 {
     public interface IPlanService
     {
-        Task<Plan> CreatePlan(CreatePlanRequest plan);
-        Task<IEnumerable<Plan>> GetPlans();
-        Plan Plan(int id);
-        Plan UpdatePlan(Plan plan);
-        Task DeletePlan(int id);
+        Task<Plan> CreateAsync(CreatePlanRequest plan);
+        Task<IEnumerable<Plan>> GetPlansAsync();
+        Task<Plan> GetPlanAsync(int id);
+        Task<Plan> UpdateAsync(UpdatePlanRequest plan);
+        Task DeleteAsync(int id);
     }
 }

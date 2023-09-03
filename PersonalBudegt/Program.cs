@@ -91,6 +91,8 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<IAccount, AccountService>();
 builder.Services.AddScoped<IPlanService, PlanService>();
+builder.Services.AddScoped<IBudgetGroupService, BudgetGroupService>();
+builder.Services.AddScoped<IBudgetItemService, BudgetItemService>();
 
 var app = builder.Build();
 

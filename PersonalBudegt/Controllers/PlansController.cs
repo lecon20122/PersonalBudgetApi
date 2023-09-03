@@ -54,7 +54,7 @@ namespace PersonalBudget.Controllers
         {
             try
             {
-                var newPlan = await _plans.CreatePlanAsync(plan);
+                var newPlan = await _plans.CreateAsync(plan);
                 return Ok(newPlan);
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace PersonalBudget.Controllers
         {
             try
             {
-                var updatedPlan = await _plans.UpdatePlanAsync(plan);
+                var updatedPlan = await _plans.UpdateAsync(plan);
                 return Ok(updatedPlan);
             }
             catch (Exception ex)

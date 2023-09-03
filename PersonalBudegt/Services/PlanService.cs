@@ -21,7 +21,7 @@ namespace PersonalBudget.Services
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<Plan> CreatePlan(CreatePlanRequest plan)
+        public async Task<Plan> CreateAsync(CreatePlanRequest plan)
         {
             var plans = _dbContext.Plans
                 .Where(p => p.UserId == _userId)
@@ -47,7 +47,7 @@ namespace PersonalBudget.Services
             return newPlan;
         }
 
-        public async Task DeletePlan(int id)
+        public async Task DeleteAsync(int id)
         {
             var plan = await _dbContext.Plans
                 .Where(p => p.UserId == _userId)
@@ -55,14 +55,14 @@ namespace PersonalBudget.Services
 
             if (plan == null)
             {
-                throw new Exception("Plan not found");
+                throw new Exception("GetPlanAsync not found");
             }
 
             _dbContext.Plans.Remove(plan);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Plan>> GetPlans()
+        public async Task<IEnumerable<Plan>> GetPlansAsync()
         {
             return await _dbContext.Plans
                 .Where(p => p.UserId == _userId)
@@ -70,14 +70,32 @@ namespace PersonalBudget.Services
                 .ToListAsync();
         }
 
-        public Plan Plan(int id)
+        public async Task<Plan> GetPlanAsync(int id)
         {
-            throw new NotImplementedException();
+            Plan plan = await _dbContext.Plans
+                .Where(p => p.UserId == _userId)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (plan == null) throw new Exception("GetPlanAsync not found");
+
+            return plan;
         }
 
-        public Plan UpdatePlan(Plan plan)
+        public async Task<Plan> UpdateAsync(UpdatePlanRequest planRequest)
         {
-            throw new NotImplementedException();
+            Plan plan = await _dbContext.Plans
+                 .Where(p => p.UserId == _userId)
+                 .FirstOrDefaultAsync(c => c.Id == planRequest.Id);
+
+            if (plan == null) throw new Exception("GetPlanAsync not found");
+
+            plan.Name = planRequest.Name;
+            plan.Description = planRequest.Description;
+            plan.TotalPlanned = planRequest.TotalPlanned;
+
+            await _dbContext.SaveChangesAsync();
+
+            return plan;
         }
     }
 }

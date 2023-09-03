@@ -5,7 +5,7 @@ using PersonalBudget.Models;
 using PersonalBudget.Requests;
 using PersonalBudget.Services.Contracts;
 
-namespace PersonalBudget.Test
+namespace PersonalBudget.Test.Controllers
 {
     public class PlansControllerTest
     {
@@ -24,7 +24,7 @@ namespace PersonalBudget.Test
             };
 
             mockPlanService
-                .Setup(m => m.CreatePlanAsync(planDTO))
+                .Setup(m => m.CreateAsync(planDTO))
                 .ReturnsAsync(new Plan
                 {
                     Id = 1,
@@ -61,7 +61,7 @@ namespace PersonalBudget.Test
             };
 
             mockPlanService
-                .Setup(m => m.CreatePlanAsync(planDTO))
+                .Setup(m => m.CreateAsync(planDTO))
                 .ThrowsAsync(new Exception("Test Exception"));
 
             // Act
@@ -181,7 +181,7 @@ namespace PersonalBudget.Test
             };
 
             mockPlanService
-                .Setup(m => m.UpdatePlanAsync(planDTO))
+                .Setup(m => m.UpdateAsync(planDTO))
                 .ReturnsAsync(new Plan
                 {
                     Id = 1,

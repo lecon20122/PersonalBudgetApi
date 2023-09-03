@@ -1,4 +1,5 @@
-﻿using PersonalBudget.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonalBudget.DataAccess;
 using PersonalBudget.Requests;
 using PersonalBudget.Services;
 using PersonalBudget.Services.Contracts;
@@ -37,9 +38,15 @@ namespace PersonalBudget.Test.Services
             };
 
             // Act
-            var newPaln = await _planService.CreatePlanAsync(planDTO);
+            var newPaln = await _planService.CreateAsync(planDTO);
 
             // Assert
+            // Assert the plan is created and in the database
+
+            var plan = await _applicationDbContext.Plans.AnyAsync(p => p.Id == newPaln.Id);
+
+            Assert.True(plan);
+
             Assert.Equal(planDTO.Name, newPaln.Name);
             Assert.Equal(planDTO.TotalPlanned, newPaln.TotalPlanned);
             Assert.Equal(planDTO.CreatedAt, newPaln.CreatedAt);
@@ -62,11 +69,11 @@ namespace PersonalBudget.Test.Services
 
             // Act
 
-            var resultFirstTime = await _planService.CreatePlanAsync(planDTO);
+            var resultFirstTime = await _planService.CreateAsync(planDTO);
 
             // Assert
             //Expects throw new Exception("GetPlanAsync already exists in the same duration");
-            await Assert.ThrowsAsync<Exception>(async () => await _planService.CreatePlanAsync(planDTO));
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.CreateAsync(planDTO));
         }
 
         [Fact]
@@ -81,10 +88,10 @@ namespace PersonalBudget.Test.Services
                 CreatedAt = DateTime.Now.AddMonths(2),
             };
 
-            var newPaln = await _planService.CreatePlanAsync(planDTO);
+            var newPaln = await _planService.CreateAsync(planDTO);
 
             // Act
-            await _planService.DeletePlanAsync(newPaln.Id);
+            await _planService.DeleteAsync(newPaln.Id);
 
             // Assert
             Assert.Null(_applicationDbContext.Plans.FirstOrDefault(p => p.Id == newPaln.Id));
@@ -97,7 +104,7 @@ namespace PersonalBudget.Test.Services
             // Act
             // Assert
             //Expects throw new Exception("GetPlanAsync not found");
-            await Assert.ThrowsAsync<Exception>(async () => await _planService.DeletePlanAsync(16));
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.DeleteAsync(16));
         }
 
         [Fact]
@@ -112,7 +119,7 @@ namespace PersonalBudget.Test.Services
                 CreatedAt = DateTime.Now.AddMonths(3),
             };
 
-            var newPaln = await _planService.CreatePlanAsync(planRequest);
+            var newPaln = await _planService.CreateAsync(planRequest);
 
             var updatePlanRequest = new UpdatePlanRequest
             {
@@ -123,7 +130,7 @@ namespace PersonalBudget.Test.Services
             };
 
             // Act
-            var updatedPlan = await _planService.UpdatePlanAsync(updatePlanRequest);
+            var updatedPlan = await _planService.UpdateAsync(updatePlanRequest);
 
             // Assert
             Assert.Equal(updatePlanRequest.Name, updatedPlan.Name);
@@ -146,7 +153,7 @@ namespace PersonalBudget.Test.Services
             // Act
             // Assert
             //Expects throw new Exception("GetPlanAsync not found");
-            await Assert.ThrowsAsync<Exception>(async () => await _planService.UpdatePlanAsync(updatePlanRequest));
+            await Assert.ThrowsAsync<Exception>(async () => await _planService.UpdateAsync(updatePlanRequest));
         }
 
         [Fact]
@@ -161,7 +168,7 @@ namespace PersonalBudget.Test.Services
                 CreatedAt = DateTime.Now.AddMonths(3),
             };
 
-            var newPaln = await _planService.CreatePlanAsync(planRequest);
+            var newPaln = await _planService.CreateAsync(planRequest);
 
             // Act
             var plan = await _planService.GetPlanAsync(newPaln.Id);
@@ -203,8 +210,8 @@ namespace PersonalBudget.Test.Services
                 CreatedAt = DateTime.Now.AddMonths(3),
             };
 
-            var newPaln = await _planService.CreatePlanAsync(planRequest);
-            var newPaln2 = await _planService.CreatePlanAsync(planRequest2);
+            var newPaln = await _planService.CreateAsync(planRequest);
+            var newPaln2 = await _planService.CreateAsync(planRequest2);
 
             // Act
             var plans = await _planService.GetPlansAsync();
