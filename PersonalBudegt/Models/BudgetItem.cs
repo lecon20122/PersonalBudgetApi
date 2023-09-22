@@ -8,7 +8,7 @@ namespace PersonalBudget.Models
         public string Name { get; set; }
         public BudgetType Type { get; set; }
         public decimal Planned { get; set; }
-        public decimal Actual { get; set; }
+        public decimal Received { get; set; }
         public int BudgetGroupId { get; set; }
         public BudgetGroup BudgetGroup { get; set; }
         public DateTime CreatedAt { get; set; }

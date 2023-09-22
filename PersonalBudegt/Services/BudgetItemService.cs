@@ -71,7 +71,6 @@ namespace PersonalBudget.Services
             if (budgetItem == null) throw new Exception("Cannot Update this item");
 
             budgetItem.Name = request.Name;
-            budgetItem.Type = request.Type;
             budgetItem.Planned = request.Planned;
 
             await _dbContext.SaveChangesAsync();

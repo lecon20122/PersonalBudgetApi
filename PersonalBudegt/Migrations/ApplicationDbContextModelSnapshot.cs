@@ -259,7 +259,7 @@ namespace PersonalBudget.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Actual")
+                    b.Property<decimal>("Rec")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("BudgetGroupId")
